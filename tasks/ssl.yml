@@ -1,0 +1,48 @@
+# - name: Create self-signed certificate, if configured.
+#   command: >
+#     openssl req -x509 -nodes -subj '/CN={{ hostname }}' -days 365
+#     -newkey rsa:4096 -sha256 -keyout {{ item.key }} -out {{ item.cert }}
+#     creates={{ item.cert }}
+#   with_items: "{{ self_signed_certs }}"
+
+- name: Ensure directory exists for local self-signed TLS certs.
+  file:
+    path: "{{ gogs_user_home }}/gogs/custom/https"
+    state: directory
+  tags: ssl
+# - name: Ensure directory exists for local self-signed TLS certs.
+#   file:
+#     path: /etc/ssl/csr
+#     state: directory
+#   tags: ssl
+# - name: Ensure directory exists for local self-signed TLS certs.
+#   file:
+#     path: /etc/ssl/private
+#     state: directory
+#   tags: ssl
+
+
+- name: Generate an OpenSSL private key.
+  openssl_privatekey:
+    path: "{{ gogs_user_home }}/gogs/custom/https/server.pem"
+    owner: "{{gogs_user}}"
+  tags: ssl
+
+- name: Generate an OpenSSL CSR.
+  openssl_csr:
+    path: "{{ gogs_user_home }}/gogs/custom/https/server.csr"
+    privatekey_path: "{{ gogs_user_home }}/gogs/custom/https/server.pem"
+    common_name: "{{ fqdn }}"
+    owner: "{{gogs_user}}"
+  tags: ssl
+
+- name: Generate a Self Signed OpenSSL certificate
+  openssl_certificate:
+    path: "{{ gogs_user_home }}/gogs/custom/https/server.crt"
+    privatekey_path: "{{ gogs_user_home }}/gogs/custom/https/server.pem"
+    csr_path: "{{ gogs_user_home }}/gogs/custom/https/server.csr"
+    provider: selfsigned
+    owner: "{{gogs_user}}"
+    subject_alt_name:
+        - "{{ fqdn }}"
+  tags: ssl
