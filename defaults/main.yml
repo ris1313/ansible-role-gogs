@@ -1,10 +1,13 @@
 ---
 gogs_user: git
 gogs_user_home: /home/git
+gogs_repository: '{{gogs_user_home}}/gogs-repositories'
+gogs_server_name: localhost
 # last 0.11.86
 gogs_ver: 0.11.86
+gogs_architecture: 386
 # gogs_binary_url: https://github.com/gogits/gogs/releases/download/v0.9.97/linux_amd64.tar.gz
-gogs_binary_url: https://github.com/gogits/gogs/releases/download/v{{ gogs_ver }}/linux_amd64.tar.gz
+gogs_binary_url: https://github.com/gogits/gogs/releases/download/v{{ gogs_ver }}/linux_{{ gogs_architecture }}.tar.gz
 # gogs_binary_url: https://dl.gogs.io/{{ gogs_ver }}/gogs_{{ gogs_ver }}_linux_amd64.tar.gz
 # last 0.11.86  https://dl.gogs.io/0.11.86/gogs_0.11.86_linux_amd64.tar.gz
 gogs_http_port: "3000"
@@ -12,3 +15,4 @@ gogs_use_mysql: false
 gogs_db_name: gogs
 gogs_db_username: gogs
 gogs_db_password: root
+gogs_db_host: 127.0.0.1:3306
