@@ -1,6 +1,6 @@
 ---
-dependencies:
-  - geerlingguy.git
+#dependencies:
+#  - geerlingguy.git
 
 galaxy_info:
   author: geerlingguy
