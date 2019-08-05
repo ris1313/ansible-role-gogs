@@ -24,3 +24,35 @@
     group: root
     mode: 0755
   when: "ansible_service_mgr == 'systemd'"
+
+# Templates
+- name: Gogs Conf Template
+  template:
+    src: gogs_app.ini.j2
+    dest: "{{ gogs_user_home }}/gogs/custom/conf/app.ini"
+  tags: t_gogs-conf
+
+- name: Creates directory
+  file:
+    path: "{{ gogs_user_home }}/gogs/custom/https"
+    owner: "{{gogs_user}}"
+    group: "{{gogs_user}}"
+    mode: 0775
+    state: directory
+
+- name: link file key
+  copy:
+    src: /etc/ssl/private/server.pem
+    remote_src: yes
+    dest: "{{ gogs_user_home }}/gogs/custom/https/server-private.key"
+    owner: "{{gogs_user}}"
+    group: "{{gogs_user}}"
+    mode: 0775
+- name: link file cert
+  copy:
+    src: /etc/ssl/csr/server.csr
+    remote_src: yes
+    dest: "{{ gogs_user_home }}/gogs/custom/https/server.cert"
+    owner: "{{gogs_user}}"
+    group: "{{gogs_user}}"
+    mode: 0775
