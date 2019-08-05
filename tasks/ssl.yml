@@ -9,6 +9,9 @@
   file:
     path: "{{ gogs_user_home }}/gogs/custom/https"
     state: directory
+    owner: "{{gogs_user}}"
+    group: "{{gogs_user}}"
+    mode: 0775
   tags: ssl
 # - name: Ensure directory exists for local self-signed TLS certs.
 #   file:
