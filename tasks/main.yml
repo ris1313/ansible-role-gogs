@@ -3,8 +3,17 @@
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_os_family }}.yml"
 
-- name: Ensure unzip is installed.
-  package: name=unzip state=present
+#- name: Ensure unzip is installed.
+#  package: name=unzip state=present
+- name: Ensure packages are installed.
+  package:
+    name:
+      - python3-pymysql
+      - python-pymysql
+      - git
+      - git-svn
+      - unzip
+    state: present
 
 - name: Create user for Gogs.
   user:
@@ -19,20 +28,21 @@
 - name: Download Gogs.
   get_url:
     url: "{{ gogs_binary_url }}"
-    dest: "{{ gogs_user_home }}/gogs.zip"
+    dest: "{{ gogs_user_home }}/gogs.tar.gz"
     owner: "{{ gogs_user }}"
     group: "{{ gogs_user }}"
   when: gogs_bin.stat.islnk is not defined
 
 - name: Expand Gogs.
   unarchive:
-    src: "{{ gogs_user_home }}/gogs.zip"
+    src: "{{ gogs_user_home }}/gogs.tar.gz"
     dest: "{{ gogs_user_home }}"
     group: "{{ gogs_user }}"
     owner: "{{ gogs_user }}"
     copy: false
   when: gogs_bin.stat.islnk is not defined
 
+- include: ssl.yml
 - include: init-setup.yml
 - include: gogs-mysql.yml
 
