@@ -17,6 +17,7 @@ ROOT = {{ gogs_repository }}
 [server]
 DOMAIN           = {{ gogs_server_name }}
 HTTP_PORT        = 3000
+HTTP_ADDR        = 0.0.0.0
 ROOT_URL         = https://{{ gogs_server_name }}:3000/
 DISABLE_SSH      = false
 SSH_PORT         = 22
